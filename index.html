@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Zavarka</title>
+    <link rel="icon" href="ico/gun.png" type="image/png"> <!-- Укажите путь к вашей иконке -->
+    <link rel="stylesheet" href="styles.css"> <!-- Подключение CSS-файла -->
+    <style>
+        /* Добавьте этот стиль для изменения размера иконки звука */
+        .sound-icon {
+            width: 30px; /* Установите желаемую ширину */
+            height: auto; /* Высота будет пропорциональной ширине */
+        }
+
+        /* Уберите эффект наведения на кнопки */
+        .button {
+            background: none; /* Убедитесь, что фон кнопок прозрачный */
+            border: none; /* Убедитесь, что у кнопок нет рамок */
+            cursor: pointer; /* Указатель при наведении */
+        }
+
+        /* Уберите эффект при наведении */
+        .button:hover {
+            outline: none; /* Уберите контур при наведении */
+            box-shadow: none; /* Убедитесь, что нет тени */
+        }
+    </style>
+</head>
+<body>
+    <div class="video-background">
+        <video id="bg-video" loop muted>
+            <source src="video-audio/1.mp4" type="video/mp4">
+            Ваш браузер не поддерживает видео.
+        </video>
+    </div>
+
+    <div class="click-to-start" id="click-to-start">Нажми, чтобы начать...</div>
+
+    <div class="overlay" id="overlay"></div>
+
+    <div class="square" id="square">
+        <img src="ico/ava.png" alt="Avatar"> 
+        <h2 style="font-size: 42px;">Zavarka</h2> 
+        <div class="text">
+            <p>Максим 14 y.o, тот самый Сигма</p>
+        </div>
+        <div class="buttons" id="button-container">
+            <button class="button" onclick="window.open('https://discord.com/invite/sTZVX2t47c', '_blank')">
+                <img src="ico/ds.png" alt="Icon 1"> 
+            </button>
+            <button class="button" onclick="window.open('https://www.youtube.com/@Zavarka1337', '_blank')">
+                <img src="ico/yt.png" alt="Icon 2"> 
+            </button>
+            <button class="button" onclick="window.open('https://нету.ua', '_blank')">
+                <img src="ico/site.png" alt="Icon 3"> 
+            </button>
+        </div>
+    </div>
+
+    <div class="volume-control" id="volume-control">
+        <img src="ico/sound_on.png" alt="Sound Icon" class="sound-icon" id="sound-icon"> <!-- Иконка звука -->
+        <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" step="5" value="100" style="--value: 100;">
+    </div>
+
+    <audio id="background-music" loop>
+        <source src="video-audio/1.mp3" type="audio/mpeg">
+        Ваш браузер не поддерживает аудио.
+    </audio>
+
+    <script>
+        const overlay = document.getElementById('overlay');
+        const video = document.getElementById('bg-video');
+        const audio = document.getElementById('background-music');
+        const clickToStart = document.getElementById('click-to-start');
+        const square = document.getElementById('square');
+        const volumeSlider = document.getElementById('volume-slider');
+        const buttonContainer = document.getElementById('button-container');
+        const volumeControl = document.getElementById('volume-control');
+        const soundIcon = document.getElementById('sound-icon');
+
+        function animateTitle() {
+        const titleParts = ['@', '@Z', '@Za', '@Zav', '@Zava', '@Zavar', '@Zavark', '@Zavarka'];
+        const reverseTitleParts = [...titleParts].reverse().slice(1);
+        const fullTitle = titleParts.concat(reverseTitleParts);
+        let index = 0;
+
+        function updateTitle() {
+            document.title = fullTitle[index];
+            index = (index + 1) % fullTitle.length;
+        }
+
+        setInterval(updateTitle, 300);
+    }
+
+    animateTitle();
+
+        document.addEventListener('click', function() {
+            clickToStart.style.opacity = '0'; 
+            setTimeout(() => {
+                clickToStart.style.display = 'none'; 
+                overlay.style.opacity = '0'; 
+                setTimeout(() => {
+                    overlay.style.display = 'none'; 
+                    video.play().catch(function(error) {
+                        console.error("Ошибка воспроизведения видео:", error);
+                    });
+                    audio.play().catch(function(error) {
+                        console.error("Ошибка воспроизведения аудио:", error);
+                    });
+                    square.classList.add('show'); 
+                    buttonContainer.classList.add('show'); // Показать иконки
+                    volumeControl.style.opacity = '1'; // Показать регулятор громкости
+                }, 500); 
+            }, 500); 
+        });
+
+        // Синхронизация музыки и видео
+        video.addEventListener('play', function() {
+            audio.currentTime = video.currentTime; // Установите текущее время аудио в текущее время видео
+            audio.play().catch(function(error) {
+                console.error("Ошибка воспроизведения аудио:", error);
+            });
+        });
+
+        video.addEventListener('pause', function() {
+            audio.pause(); // Пауза аудио, когда видео приостанавливается
+        });
+
+        video.addEventListener('ended', function() {
+            audio.pause(); // Пауза аудио, когда видео заканчивается
+            audio.currentTime = 0; // Сбросьте время аудио
+        });
+
+        volumeSlider.addEventListener('input', function() {
+            audio.volume = this.value / 100; 
+            this.style.setProperty('--value', this.value);
+
+            // Изменение иконки в зависимости от уровня громкости
+            if (this.value == 0) {
+                soundIcon.src = 'ico/sound_off.png'; // Иконка, когда звук выключен
+            } else {
+                soundIcon.src = 'ico/sound_on.png'; // Иконка, когда звук включён
+            }
+        });
+    </script>
+</body>
+</html>
