@@ -154,7 +154,6 @@
         // Snow effect
         const canvas = document.getElementById('snow-canvas');
         const ctx = canvas.getContext('2d');
-        let mouseX = window.innerWidth / 2;
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -162,10 +161,6 @@
         window.addEventListener('resize', () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
-        });
-
-        document.addEventListener('mousemove', (e) => {
-            mouseX = e.clientX;
         });
 
         const snowflakes = [];
@@ -178,15 +173,16 @@
                 this.x = Math.random() * canvas.width;
                 this.y = Math.random() * -canvas.height;
                 this.size = Math.random() * 3 + 1;
-                this.speed = Math.random() * 2 + 1;
+                this.speed = Math.random() * 3 + 1;
                 this.opacity = Math.random() * 0.5 + 0.3;
+                this.wind = (Math.random() - 0.5) * 2; // Random horizontal drift
             }
 
             update() {
                 this.y += this.speed;
-                if (this.y > canvas.height) {
+                this.x += this.wind + Math.sin(this.y * 0.01) * 0.5; // Add dynamic swaying
+                if (this.y > canvas.height || this.x < 0 || this.x > canvas.width) {
                     this.reset();
-                    this.x = mouseX + (Math.random() - 0.5) * 200; // More snowflakes near cursor
                 }
             }
 
@@ -200,7 +196,7 @@
 
         function createSnowflakes() {
             if (snowflakes.length < 100) {
-                if (Math.random() < 0.1) { // Increased chance near cursor
+                if (Math.random() < 0.1) {
                     snowflakes.push(new Snowflake());
                 }
             }
