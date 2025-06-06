@@ -26,6 +26,13 @@
         .buttons img {
             filter: brightness(0) invert(1);
         }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 5;
+        }
     </style>
 </head>
 <body>
@@ -36,6 +43,8 @@
         </video>
     </div>
 
+    <canvas id="snow-canvas"></canvas>
+
     <div class="click-to-start" id="click-to-start">Нажми, чтобы начать...</div>
 
     <div class="overlay" id="overlay"></div>
@@ -44,7 +53,7 @@
         <img src="https://yt3.googleusercontent.com/CjLnTwmBcJZBAPih5LsYrwlmZT86eOqyBvVGdlArj1xBgdnYyD0xyVNPwtTlwNrJITf8DUwW=s120-c-k-c0x00ffffff-no-rj" alt="Avatar"> 
         <h2 style="font-size: 42px;">Zavarka</h2> 
         <div class="text">
-            <p>Зовут Максим , мне 15 годиков, люблю много чего делать, знаю python, чу-чуть C++ , java, lua</p>
+            <p>Зовут Максим , мне 15 годиков, люблю много чего делать, знаю python, чу-чуть C++ , java и lua</p>
         </div>
         <div class="buttons" id="button-container">
             <button class="button" onclick="window.open('https://discord.com/invite/sTZVX2t47c', '_blank')">
@@ -61,7 +70,7 @@
 
     <div class="volume-control" id="volume-control">
         <img src="ico/sound_on.png" alt="Sound Icon" class="sound-icon" id="sound-icon">
-        <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" step="5" value="100" style="--value: 100;">
+        <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" step="1" value="100" style="--value: 100;">
     </div>
 
     <audio id="background-music" loop>
@@ -141,6 +150,76 @@
                 soundIcon.src = 'ico/sound_on.png';
             }
         });
+
+        // Snow effect
+        const canvas = document.getElementById('snow-canvas');
+        const ctx = canvas.getContext('2d');
+        let mouseX = window.innerWidth / 2;
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+        });
+
+        const snowflakes = [];
+        class Snowflake {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * -canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speed = Math.random() * 2 + 1;
+                this.opacity = Math.random() * 0.5 + 0.3;
+            }
+
+            update() {
+                this.y += this.speed;
+                if (this.y > canvas.height) {
+                    this.reset();
+                    this.x = mouseX + (Math.random() - 0.5) * 200; // More snowflakes near cursor
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        function createSnowflakes() {
+            if (snowflakes.length < 100) {
+                if (Math.random() < 0.1) { // Increased chance near cursor
+                    snowflakes.push(new Snowflake());
+                }
+            }
+        }
+
+        function animateSnow() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            createSnowflakes();
+            snowflakes.forEach((snowflake, index) => {
+                snowflake.update();
+                snowflake.draw();
+                if (snowflake.y > canvas.height) {
+                    snowflakes.splice(index, 1);
+                }
+            });
+            requestAnimationFrame(animateSnow);
+        }
+
+        animateSnow();
     </script>
 </body>
 </html>
