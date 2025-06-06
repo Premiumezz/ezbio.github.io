@@ -4,26 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@Zavarka</title>
-    <link rel="icon" href="ico/gun.png" type="image/png"> <!-- Укажите путь к вашей иконке -->
-    <link rel="stylesheet" href="styles.css"> <!-- Подключение CSS-файла -->
+    <link rel="icon" href="ico/gun.png" type="image/png">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        /* Добавьте этот стиль для изменения размера иконки звука */
         .sound-icon {
-            width: 30px; /* Установите желаемую ширину */
-            height: auto; /* Высота будет пропорциональной ширине */
+            width: 30px;
+            height: auto;
         }
 
-        /* Уберите эффект наведения на кнопки */
         .button {
-            background: none; /* Убедитесь, что фон кнопок прозрачный */
-            border: none; /* Убедитесь, что у кнопок нет рамок */
-            cursor: pointer; /* Указатель при наведении */
+            background: none;
+            border: none;
+            cursor: pointer;
         }
 
-        /* Уберите эффект при наведении */
         .button:hover {
-            outline: none; /* Уберите контур при наведении */
-            box-shadow: none; /* Убедитесь, что нет тени */
+            outline: none;
+            box-shadow: none;
+        }
+
+        .buttons img {
+            filter: brightness(0) invert(1);
         }
     </style>
 </head>
@@ -59,7 +60,7 @@
     </div>
 
     <div class="volume-control" id="volume-control">
-        <img src="ico/sound_on.png" alt="Sound Icon" class="sound-icon" id="sound-icon"> <!-- Иконка звука -->
+        <img src="ico/sound_on.png" alt="Sound Icon" class="sound-icon" id="sound-icon">
         <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" step="5" value="100" style="--value: 100;">
     </div>
 
@@ -80,20 +81,20 @@
         const soundIcon = document.getElementById('sound-icon');
 
         function animateTitle() {
-        const titleParts = ['@', '@Z', '@Za', '@Zav', '@Zava', '@Zavar', '@Zavark', '@Zavarka'];
-        const reverseTitleParts = [...titleParts].reverse().slice(1);
-        const fullTitle = titleParts.concat(reverseTitleParts);
-        let index = 0;
+            const titleParts = ['@', '@Z', '@Za', '@Zav', '@Zava', '@Zavar', '@Zavark', '@Zavarka'];
+            const reverseTitleParts = [...titleParts].reverse().slice(1);
+            const fullTitle = titleParts.concat(reverseTitleParts);
+            let index = 0;
 
-        function updateTitle() {
-            document.title = fullTitle[index];
-            index = (index + 1) % fullTitle.length;
+            function updateTitle() {
+                document.title = fullTitle[index];
+                index = (index + 1) % fullTitle.length;
+            }
+
+            setInterval(updateTitle, 300);
         }
 
-        setInterval(updateTitle, 300);
-    }
-
-    animateTitle();
+        animateTitle();
 
         document.addEventListener('click', function() {
             clickToStart.style.opacity = '0'; 
@@ -109,38 +110,35 @@
                         console.error("Ошибка воспроизведения аудио:", error);
                     });
                     square.classList.add('show'); 
-                    buttonContainer.classList.add('show'); // Показать иконки
-                    volumeControl.style.opacity = '1'; // Показать регулятор громкости
+                    buttonContainer.classList.add('show');
+                    volumeControl.style.opacity = '1';
                 }, 500); 
             }, 500); 
         });
 
-        // Синхронизация музыки и видео
         video.addEventListener('play', function() {
-            audio.currentTime = video.currentTime; // Установите текущее время аудио в текущее время видео
+            audio.currentTime = video.currentTime;
             audio.play().catch(function(error) {
                 console.error("Ошибка воспроизведения аудио:", error);
             });
         });
 
         video.addEventListener('pause', function() {
-            audio.pause(); // Пауза аудио, когда видео приостанавливается
+            audio.pause();
         });
 
         video.addEventListener('ended', function() {
-            audio.pause(); // Пауза аудио, когда видео заканчивается
-            audio.currentTime = 0; // Сбросьте время аудио
+            audio.pause();
+            audio.currentTime = 0;
         });
 
         volumeSlider.addEventListener('input', function() {
             audio.volume = this.value / 100; 
             this.style.setProperty('--value', this.value);
-
-            // Изменение иконки в зависимости от уровня громкости
             if (this.value == 0) {
-                soundIcon.src = 'ico/sound_off.png'; // Иконка, когда звук выключен
+                soundIcon.src = 'ico/sound_off.png';
             } else {
-                soundIcon.src = 'ico/sound_on.png'; // Иконка, когда звук включён
+                soundIcon.src = 'ico/sound_on.png';
             }
         });
     </script>
