@@ -130,6 +130,29 @@ video {
     transform: scale(1.2);
 }
 
+.visitor-counter {
+    position: absolute;
+    bottom: 4px; 
+    left: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.eye-icon {
+    width: 20px !important;
+    height: 20px !important;
+    filter: brightness(0) invert(1);
+    position: relative;
+    top: 5px; /* Adjust this value to move it lower */
+}
+
+#visitor-count {
+    color: white;
+    font-size: 16px;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.7);
+}
+
 @keyframes titleAnimation {
     0% { transform: translateY(-50px); opacity: 0; }
     100% { transform: translateY(0); opacity: 1; }

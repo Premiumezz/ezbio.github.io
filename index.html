@@ -66,6 +66,10 @@
                 <img src="https://img.icons8.com/fluency-systems-filled/48/internet.png" alt="Icon 3"> 
             </button>
         </div>
+        <div class="visitor-counter">
+            <img src="https://img.icons8.com/ios-glyphs/30/visible--v1.png" alt="Eye Icon" class="eye-icon">
+            <span id="visitor-count">0</span>
+        </div>
     </div>
 
     <div class="volume-control" id="volume-control">
@@ -89,23 +93,7 @@
             });
 
         document.addEventListener('keydown', function(e) {
-            // F12
-            if (e.key === 'F12') {
-                e.preventDefault();
-                showDevToolsWarning();
-            }
-            // Ctrl+Shift+I
-            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
-                e.preventDefault();
-                showDevToolsWarning();
-            }
-            // Ctrl+Shift+J
-            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
-                e.preventDefault();
-                showDevToolsWarning();
-            }
-            // Ctrl+U
-            if (e.ctrlKey && e.key === 'U') {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && e.key === 'U')) {
                 e.preventDefault();
                 showDevToolsWarning();
             }
@@ -120,16 +108,13 @@
         }
 
         function detectDevTools() {
-            const threshold = 160; 
-            const width = window.outerWidth - window.innerWidth;
-            const height = window.outerHeight - window.innerHeight;
-            if (width > threshold || height > threshold) {
+            const threshold = 160;
+            if ((window.outerWidth - window.innerWidth) > threshold || (window.outerHeight - window.innerHeight) > threshold) {
                 showDevToolsWarning();
             }
         }
 
         setInterval(detectDevTools, 1000);
-
 
         const overlay = document.getElementById('overlay');
         const video = document.getElementById('bg-video');
@@ -158,30 +143,24 @@
         animateTitle();
 
         document.addEventListener('click', function() {
-            clickToStart.style.opacity = '0'; 
+            clickToStart.style.opacity = '0';
             setTimeout(() => {
-                clickToStart.style.display = 'none'; 
-                overlay.style.opacity = '0'; 
+                clickToStart.style.display = 'none';
+                overlay.style.opacity = '0';
                 setTimeout(() => {
-                    overlay.style.display = 'none'; 
-                    video.play().catch(function(error) {
-                        console.error("Ошибка воспроизведения видео:", error);
-                    });
-                    audio.play().catch(function(error) {
-                        console.error("Ошибка воспроизведения аудио:", error);
-                    });
-                    square.classList.add('show'); 
+                    overlay.style.display = 'none';
+                    video.play().catch(error => console.error("Ошибка воспроизведения видео:", error));
+                    audio.play().catch(error => console.error("Ошибка воспроизведения аудио:", error));
+                    square.classList.add('show');
                     buttonContainer.classList.add('show');
                     volumeControl.style.opacity = '1';
-                }, 500); 
-            }, 500); 
+                }, 500);
+            }, 500);
         });
 
         video.addEventListener('play', function() {
             audio.currentTime = video.currentTime;
-            audio.play().catch(function(error) {
-                console.error("Ошибка воспроизведения аудио:", error);
-            });
+            audio.play().catch(error => console.error("Ошибка воспроизведения аудио:", error));
         });
 
         video.addEventListener('pause', function() {
@@ -193,16 +172,15 @@
             audio.currentTime = 0;
         });
 
-        // Volume control
         function updateVolumeSlider(value) {
             audio.volume = value / 100;
             volumeSlider.style.setProperty('--value', value + '%');
             soundIcon.src = value == 0 ? 'ico/sound_off.png' : 'ico/sound_on.png';
         }
-        
+
         audio.volume = volumeSlider.value / 100;
         updateVolumeSlider(volumeSlider.value);
-        
+
         volumeSlider.addEventListener('input', function() {
             updateVolumeSlider(this.value);
         });
@@ -215,7 +193,6 @@
             }, 10);
         });
 
-        // Snow effect
         const canvas = document.getElementById('snow-canvas');
         const ctx = canvas.getContext('2d');
 
@@ -239,12 +216,12 @@
                 this.size = Math.random() * 3 + 1;
                 this.speed = Math.random() * 3 + 1;
                 this.opacity = Math.random() * 0.5 + 0.3;
-                this.wind = (Math.random() - 0.5) * 2; 
+                this.wind = (Math.random() - 0.5) * 2;
             }
 
             update() {
                 this.y += this.speed;
-                this.x += this.wind + Math.sin(this.y * 0.01) * 0.5; 
+                this.x += this.wind + Math.sin(this.y * 0.01) * 0.5;
                 if (this.y > canvas.height || this.x < 0 || this.x > canvas.width) {
                     this.reset();
                 }
@@ -259,10 +236,8 @@
         }
 
         function createSnowflakes() {
-            if (snowflakes.length < 100) {
-                if (Math.random() < 0.1) {
-                    snowflakes.push(new Snowflake());
-                }
+            if (snowflakes.length < 100 && Math.random() < 0.1) {
+                snowflakes.push(new Snowflake());
             }
         }
 
@@ -282,9 +257,19 @@
         animateSnow();
 
         function _0x1234() {
-            return document.title = '@Zavarka';
+            document.title = '@Zavarka';
         }
         setInterval(_0x1234, 5000);
+
+        // Visitor counter
+        function updateVisitorCount() {
+            let count = localStorage.getItem('visitorCount') || 0;
+            count = parseInt(count) + 1;
+            localStorage.setItem('visitorCount', count);
+            document.getElementById('visitor-count').textContent = count;
+        }
+
+        updateVisitorCount();
     </script>
 </body>
 </html>
