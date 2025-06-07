@@ -262,13 +262,15 @@
         setInterval(_0x1234, 5000);
 
         // Visitor counter
-        function updateVisitorCount() {
-            let count = localStorage.getItem('visitorCount') || 0;
-            count = parseInt(count) + 1;
-            localStorage.setItem('visitorCount', count);
-            document.getElementById('visitor-count').textContent = count;
+        async function updateVisitorCount() {
+            try {
+                const response = await fetch('/.netlify/functions/visitor-count', { method: 'POST' });
+                const data = await response.json();
+                document.getElementById('visitor-count').textContent = data.count;
+            } catch (error) {
+                console.error('Ошибка:', error);
+            }
         }
-
         updateVisitorCount();
     </script>
 </body>
