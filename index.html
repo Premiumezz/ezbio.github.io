@@ -73,12 +73,64 @@
         <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" step="1" value="100" style="--value: 100;">
     </div>
 
+    <div class="dev-tools-warning" id="dev-tools-warning">
+        Пожалуйста, не используйте инструменты разработчика (F12 или правый клик)!
+    </div>
+
     <audio id="background-music" loop>
         <source src="video-audio/1.mp3" type="audio/mpeg">
         Ваш браузер не поддерживает аудио.
     </audio>
 
     <script>
+        //RCLICK
+        document.addEventListener('contextmenu', function(e) {
+                e.preventDefault();
+            });
+
+        document.addEventListener('keydown', function(e) {
+            // F12
+            if (e.key === 'F12') {
+                e.preventDefault();
+                showDevToolsWarning();
+            }
+            // Ctrl+Shift+I
+            if (e.ctrlKey && e.shiftKey && e.key === 'I') {
+                e.preventDefault();
+                showDevToolsWarning();
+            }
+            // Ctrl+Shift+J
+            if (e.ctrlKey && e.shiftKey && e.key === 'J') {
+                e.preventDefault();
+                showDevToolsWarning();
+            }
+            // Ctrl+U
+            if (e.ctrlKey && e.key === 'U') {
+                e.preventDefault();
+                showDevToolsWarning();
+            }
+        });
+
+        function showDevToolsWarning() {
+            const warning = document.getElementById('dev-tools-warning');
+            warning.style.display = 'block';
+            setTimeout(() => {
+                warning.style.display = 'none';
+            }, 3000);
+        }
+
+        function detectDevTools() {
+            const threshold = 160; 
+            const width = window.outerWidth - window.innerWidth;
+            const height = window.outerHeight - window.innerHeight;
+            if (width > threshold || height > threshold) {
+                showDevToolsWarning();
+            }
+        }
+
+        setInterval(detectDevTools, 1000);
+
+
         const overlay = document.getElementById('overlay');
         const video = document.getElementById('bg-video');
         const audio = document.getElementById('background-music');
@@ -144,16 +196,23 @@
         // Volume control
         function updateVolumeSlider(value) {
             audio.volume = value / 100;
-            volumeSlider.style.setProperty('--value', value);
+            volumeSlider.style.setProperty('--value', value + '%');
             soundIcon.src = value == 0 ? 'ico/sound_off.png' : 'ico/sound_on.png';
         }
         
-        // Initialize volume
         audio.volume = volumeSlider.value / 100;
         updateVolumeSlider(volumeSlider.value);
         
         volumeSlider.addEventListener('input', function() {
             updateVolumeSlider(this.value);
+        });
+
+        let debounceTimeout;
+        volumeSlider.addEventListener('input', function() {
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(() => {
+                updateVolumeSlider(this.value);
+            }, 10);
         });
 
         // Snow effect
@@ -180,12 +239,12 @@
                 this.size = Math.random() * 3 + 1;
                 this.speed = Math.random() * 3 + 1;
                 this.opacity = Math.random() * 0.5 + 0.3;
-                this.wind = (Math.random() - 0.5) * 2; // Random horizontal drift
+                this.wind = (Math.random() - 0.5) * 2; 
             }
 
             update() {
                 this.y += this.speed;
-                this.x += this.wind + Math.sin(this.y * 0.01) * 0.5; // Add dynamic swaying
+                this.x += this.wind + Math.sin(this.y * 0.01) * 0.5; 
                 if (this.y > canvas.height || this.x < 0 || this.x > canvas.width) {
                     this.reset();
                 }
@@ -221,6 +280,11 @@
         }
 
         animateSnow();
+
+        function _0x1234() {
+            return document.title = '@Zavarka';
+        }
+        setInterval(_0x1234, 5000);
     </script>
 </body>
 </html>
