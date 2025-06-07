@@ -141,14 +141,19 @@
             audio.currentTime = 0;
         });
 
+        // Volume control
+        function updateVolumeSlider(value) {
+            audio.volume = value / 100;
+            volumeSlider.style.setProperty('--value', value);
+            soundIcon.src = value == 0 ? 'ico/sound_off.png' : 'ico/sound_on.png';
+        }
+        
+        // Initialize volume
+        audio.volume = volumeSlider.value / 100;
+        updateVolumeSlider(volumeSlider.value);
+        
         volumeSlider.addEventListener('input', function() {
-            audio.volume = this.value / 100; 
-            this.style.setProperty('--value', this.value);
-            if (this.value == 0) {
-                soundIcon.src = 'ico/sound_off.png';
-            } else {
-                soundIcon.src = 'ico/sound_on.png';
-            }
+            updateVolumeSlider(this.value);
         });
 
         // Snow effect

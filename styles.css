@@ -163,67 +163,65 @@ video {
 }
 
 .volume-control {
-    position: absolute; 
-    top: 10px; 
-    left: 10px; 
-    width: 200px; 
-    display: flex; 
-    align-items: center; 
-    backdrop-filter: blur(100px); 
-    border-radius: 10px; 
-    padding: 10px; 
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    backdrop-filter: blur(10px);
+    border-radius: 10px;
+    padding: 10px;
     opacity: 0;
     transition: opacity 0.5s ease;
+    z-index: 15;
 }
 
 .volume-slider {
-    -webkit-appearance: none; 
+    -webkit-appearance: none;
     appearance: none;
-    width: 100%; 
-    height: 10px; 
-    border-radius: 5px; 
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
     background: #818181;
-    outline: none; 
-    position: relative; 
-    z-index: 1; 
-    transition: all 0.2s ease; 
+    outline: none;
+    position: relative;
+    z-index: 1;
+    transition: all 0.2s ease;
 }
 
 .volume-slider::-webkit-slider-thumb {
-    -webkit-appearance: none; 
-    appearance: none; 
-    width: 20px; 
-    height: 20px; 
-    border-radius: 50%; 
-    background: #ffffff; 
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ffffff;
     box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.3);
-    cursor: pointer; 
-    z-index: 2; 
+    cursor: pointer;
+    z-index: 2;
 }
 
 .volume-slider::-moz-range-thumb {
-    width: 20px; 
-    height: 20px; 
-    border-radius: 50%; 
-    background: #ffffff; 
-    cursor: pointer; 
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
 }
 
 .volume-slider:focus {
-    outline: none; 
+    outline: none;
 }
 
-.volume-slider::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: calc(100% * (var(--value) / 100)); 
-    height: 100%;
-    background: #fff;
-    border-radius: 5px; 
-    z-index: 0; 
-    transform: translateY(-50%); 
+.volume-slider::-webkit-slider-runnable-track {
+    background: linear-gradient(to right, #ffffff 0%, #ffffff var(--value), #818181 var(--value), #818181 100%);
+    border-radius: 5px;
+}
+
+.volume-slider::-moz-range-track {
+    background: linear-gradient(to right, #ffffff 0%, #ffffff var(--value), #818181 var(--value), #818181 100%);
+    border-radius: 5px;
 }
 
 .text {
