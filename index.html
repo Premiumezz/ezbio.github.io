@@ -73,10 +73,6 @@
         <input type="range" class="volume-slider" id="volume-slider" min="0" max="100" step="1" value="100" style="--value: 100;">
     </div>
 
-    <div class="dev-tools-warning" id="dev-tools-warning">
-        Пожалуйста, не используйте инструменты разработчика (F12 или правый клик)!
-    </div>
-
     <audio id="background-music" loop>
         <source src="video-audio/1.mp3" type="audio/mpeg">
         Ваш браузер не поддерживает аудио.
@@ -91,7 +87,6 @@
         document.addEventListener('keydown', function(e) {
             if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && e.key === 'U')) {
                 e.preventDefault();
-                showDevToolsWarning();
             }
         });
 
@@ -106,7 +101,6 @@
         function detectDevTools() {
             const threshold = 160;
             if ((window.outerWidth - window.innerWidth) > threshold || (window.outerHeight - window.innerHeight) > threshold) {
-                showDevToolsWarning();
             }
         }
 
