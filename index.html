@@ -66,10 +66,6 @@
                 <img src="https://img.icons8.com/fluency-systems-filled/48/internet.png" alt="Icon 3"> 
             </button>
         </div>
-        <div class="visitor-counter">
-            <img src="https://img.icons8.com/ios-glyphs/30/visible--v1.png" alt="Eye Icon" class="eye-icon">
-            <span id="visitor-count">0</span>
-      </div>
     </div>
 
     <div class="volume-control" id="volume-control">
@@ -260,16 +256,6 @@
             document.title = '@Zavarka';
         }
         setInterval(_0x1234, 5000);
-
-        // Visitor counter
-        function updateVisitorCount() {
-            let count = localStorage.getItem('visitorCount') || 0;
-            count = parseInt(count) + 1;
-            localStorage.setItem('visitorCount', count);
-            document.getElementById('visitor-count').textContent = count;
-        }
-
-        updateVisitorCount();
     </script>
 </body>
 </html>
